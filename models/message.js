@@ -31,9 +31,9 @@ class Message {
   static async markRead(id) {
     const result = await db.query(
         `UPDATE messages
-           SET read_at = current_timestamp
-           WHERE id = $1
-           RETURNING id, read_at`,
+          SET read_at = current_timestamp
+          WHERE id = $1
+          RETURNING id, read_at`,
         [id]);
 
     if (!result.rows[0]) {
