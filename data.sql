@@ -1,4 +1,6 @@
-DROP TABLE IF EXISTS users;
+\c messagely
+
+DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS messages;
 
 CREATE TABLE users (

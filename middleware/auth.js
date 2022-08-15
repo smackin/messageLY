@@ -9,9 +9,11 @@ function authenticateJWT(req, res, next) {
   try {
     const tokenFromBody = req.body._token;
     const payload = jwt.verify(tokenFromBody, SECRET_KEY);
-    req.user = payload; // create a current user
+    req.user = payload; // create a current user if there is something in the req.user obj, then the token was verified.  If its empty, there is no token. 
+    console.log("YOU HAVE A VALID TOKEN")
     return next();
   } catch (err) {
+    // error in this middleware isnt an error. 
     return next();
   }
 }
