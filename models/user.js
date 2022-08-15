@@ -1,5 +1,7 @@
 /** User class for message.ly */
 
+const db = require("../../Springboard/javascript/express-lunchly/db");
+const { BCRYPT_WORK_FACTOR } = require("../config");
 const ExpressError = require("../expressError");
 
 /** User of the site. */
@@ -9,14 +11,25 @@ class User {
     this.username = username;
     this.password = password;
     this.first_name = first_name;
-    this.last_name = pholast_namene;
+    this.last_name = last_name;
     this.phone = phone;
     }
   /** register new user -- returns
    *    {username, password, first_name, last_name, phone}
    */
 
-  static async register({username, password, first_name, last_name, phone}) { }
+  static async register({username, password, first_name, last_name, phone}) { 
+    let hashedPassword = bcrypt.hash(password, BCRYPT_WORK_FACTOR); 
+    const result = await db.query(
+      `INSERT INTO users
+      (username, password, first_name, last_name, phone
+        join_at last_login_at)
+      VALUES ($1, $2, $3, $4, $5, current_timestamp, current_timestamp)
+      RETURNING username, password, first_name, last_name, phone`,
+  [username, hashedPassword, first_name, last_name, phone]
+  );
+  return result.rows[0]
+}
 
   /** Authenticate: is this username/password valid? Returns boolean. */
 
